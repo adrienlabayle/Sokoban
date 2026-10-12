@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QKeyEvent>
 
 #include "game.h"
 
@@ -20,9 +21,10 @@ public:
     ~MainWindow();
 
     void paintEvent(QPaintEvent* e);
+    void keyPressEvent(QKeyEvent * event);
 
 private:
     Ui::MainWindow *ui;
-    Game m_game;
+    Game game;
 };
 #endif // MAINWINDOW_H

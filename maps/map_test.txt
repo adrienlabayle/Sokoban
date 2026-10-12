@@ -1,0 +1,7 @@
+6 7
+xxx  Px
+x +   x
+x  x  x
+x  x  x
+x-    x
+xxxxxxx

@@ -1,12 +1,14 @@
 #include "display.h"
 
+#include <QDebug>
+
 Display::Display() {
 
 }
 
 void Display::DisplayMap(QPainter* p, int width, int height, const Map& map) const{
-    int w = map.get_width();
-    int h = map.get_height();
+    int w = map.getWidth();
+    int h = map.getHeight();
     
     int cell_w = width / w;
     int cell_h = height / h;
@@ -17,18 +19,31 @@ void Display::DisplayMap(QPainter* p, int width, int height, const Map& map) con
     for (int i = 0; i < h; i++)
         for (int j = 0; j < w; j++)
         {
-            switch (map.get_cells(i, j)) {
+            QBrush currentBruch;
+            switch (map.getDisplayCells({i, j}))
+            {
             case 0: {
-                // Si (i + j) est pair -> couleur 1, sinon -> couleur 2
                 QColor currentColor = ((i + j) & 1) ? gridColor2 : gridColor1;
+                currentBruch.setStyle(Qt::SolidPattern);
+                currentBruch.setColor(currentColor);
+                break;
+            }
+            case 1:
+                currentBruch.setTexture(wallTexture.scaled(cell_w, cell_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                break;
+            case 2:
+                currentBruch.setTexture(depotTexture.scaled(cell_w, cell_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                break;
+            case 3:
+                currentBruch.setTexture(boxTexture.scaled(cell_w, cell_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                break;
+            case 4:
+                currentBruch.setTexture(playerTexture.scaled(cell_w, cell_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                break;
+            }
 
-                p->setPen(QPen(currentColor, 1));
-                p->fillRect(j * cell_w, i * cell_h, cell_w, cell_h, QBrush(currentColor));
-                p->drawRect(j * cell_w, i * cell_h, cell_w, cell_h);
-                break;
-            }
-            default:
-                break;
-            }
+            //p->setPen(QPen(Qt::white, 1));
+            p->fillRect(j * cell_w, i * cell_h, cell_w, cell_h, currentBruch);
+            //p->drawRect(j * cell_w, i * cell_h, cell_w, cell_h);
         }
 }

@@ -5,12 +5,19 @@
 #include <stdexcept>
 #include <string>
 
-int Load::charToCell(char c, std::size_t i, std::size_t j) {
+int Load::charToCell(char c, Coords coords, Map& map) {
     switch (c) {
         case ' ': return 0;
+        case 'P': // we have to keep the information of what is under the player
+            map.setPlayerCoords(coords);
+            return 0;
+        case 'x': return 1;
+        case '-': return 2;
+        case '+':
+            map.addBoxCoords(coords);
+            return 0;
         default:
-            throw std::runtime_error(
-                "LoadMap : caractere inconnu '" + std::string(1, c) + "' a la case (" + std::to_string(i) + ", " + std::to_string(j) + ")");
+            throw std::runtime_error("LoadMap : caractere inconnu '" + std::string(1, c) + "' a la case (" + std::to_string(coords.r) + ", " + std::to_string(coords.c) + ")");
     }
 }
 
@@ -34,18 +41,18 @@ Map Load::LoadMap(const std::filesystem::path& path) {
 
     Map map(width, height);
 
-    for (int i = 0; i < map.get_height(); ++i) {
+    for (int i = 0; i < map.getHeight(); ++i) {
         if (!std::getline(file, line)) {
-            throw std::runtime_error("LoadMap : il manque des lignes (attendu " + std::to_string(map.get_height()) + ", lu " + std::to_string(i) + ")");
+            throw std::runtime_error("LoadMap : il manque des lignes (attendu " + std::to_string(map.getHeight()) + ", lu " + std::to_string(i) + ")");
         }
         if (!line.empty() && line.back() == '\r') {
             line.pop_back();
         }
-        if ((int)line.size() != map.get_width()) {
-            throw std::runtime_error("LoadMap : ligne " + std::to_string(i) + " pas de bonne longueur (" + std::to_string(line.size()) + " > " + std::to_string(map.get_width()) + ")");
+        if ((int)line.size() != map.getWidth()) {
+            throw std::runtime_error("LoadMap : ligne " + std::to_string(i) + " pas de bonne longueur (" + std::to_string(line.size()) + " > " + std::to_string(map.getWidth()) + ")");
         }
-        for (std::size_t j = 0; j < line.size(); ++j) {
-            map.set_cells(i, j, charToCell(line[j], i, j));
+        for (int j = 0; j < (int)line.size(); ++j) {
+            map.setCells({i, j}, charToCell(line[j], {i, j}, map));
         }
     }
 

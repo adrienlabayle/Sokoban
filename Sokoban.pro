@@ -9,7 +9,6 @@ CONFIG += c++17
 SOURCES += \
     Load.cpp \
     display.cpp \
-    entity.cpp \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -19,7 +18,6 @@ HEADERS += \
     Load.h \
     Map.h \
     display.h \
-    entity.h \
     game.h \
     mainwindow.h
 

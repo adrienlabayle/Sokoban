@@ -9,7 +9,7 @@ public:
     static Map LoadMap(const std::filesystem::path& path);
 
 private:
-    static int charToCell(char c, std::size_t i, std::size_t j);
+    static int charToCell(char c, Coords coords, Map& map);
 };
 
 #endif // LOAD_H

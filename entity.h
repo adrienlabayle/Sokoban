@@ -13,7 +13,7 @@ class Entity
 public:
     Entity(int pos_x, int pos_y);
 
-    void Move(Direction);
+    void Move(Direction dir);
 
 private:
     int PosX = 0;

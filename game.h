@@ -11,13 +11,14 @@
 class Game
 {
 public:
-    Game(Map&& map);
+    Game(Map&& m);
 
     void Show(QPainter* p, int width, int height) const;
 
+    Map map;
+
 private:
-    Display m_display;
-    Map m_map;
+    Display display;
 };
 
 #endif // GAME_H
