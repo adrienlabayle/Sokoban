@@ -5,11 +5,13 @@
 #include "Map.h"
 
 class Load {
-public:
-    static Map LoadMap(const std::filesystem::path& path);
 
-private:
-    static int charToCell(char c, Coords coords, Map& map);
+    private:
+        static int charToCell(char c, Coords coords, Map& map);
+
+    public:
+        static Map LoadMap(const std::filesystem::path& path);
+
 };
 
 #endif // LOAD_H

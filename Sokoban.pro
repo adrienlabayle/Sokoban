@@ -8,24 +8,36 @@ CONFIG += c++17
 
 SOURCES += \
     Load.cpp \
+    bloc.cpp \
+    coords.cpp \
     display.cpp \
     entity.cpp \
+    floor.cpp \
     game.cpp \
+    location.cpp \
     main.cpp \
     mainwindow.cpp \
     map.cpp \
     mobileentity.cpp \
-    staticentity.cpp
+    player.cpp \
+    staticentity.cpp \
+    wall.cpp
 
 HEADERS += \
     Load.h \
     Map.h \
+    bloc.h \
+    coords.h \
     display.h \
     entity.h \
+    floor.h \
     game.h \
+    location.h \
     mainwindow.h \
     mobileentity.h \
-    staticentity.h
+    player.h \
+    staticentity.h \
+    wall.h
 
 FORMS += \
     mainwindow.ui
