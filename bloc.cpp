@@ -11,5 +11,5 @@ bool Bloc::canPush() const {
 }
 
 char Bloc::getSymbol() const {
-    return '$';
+    return '+';
 }

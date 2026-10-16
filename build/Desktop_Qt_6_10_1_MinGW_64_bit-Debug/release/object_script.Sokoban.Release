@@ -1,0 +1,15 @@
+release/Load.o
+release/bloc.o
+release/display.o
+release/entity.o
+release/floor.o
+release/game.o
+release/location.o
+release/main.o
+release/mainwindow.o
+release/map.o
+release/mobileentity.o
+release/player.o
+release/staticentity.o
+release/wall.o
+release/moc_mainwindow.o

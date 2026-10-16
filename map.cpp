@@ -9,7 +9,7 @@ Map::Map(int w, int h) :
 // Member methods
 
 bool Map::moveBox(Coords pos, Coords wantedPos){
-    if((wantedPos.c >= 0 ) && (getCells(wantedPos) != 1) && (!isBoxCoords(wantedPos))) // still in the map, not a wall and not a box
+    if((wantedPos.r >= 0) && (wantedPos.r < height) && (wantedPos.c >= 0) && (wantedPos.c < width) && (getCells(wantedPos) != 1) && (!isBoxCoords(wantedPos))) // still in the map, not a wall and not a box
     {
         moveBoxCoords(pos, wantedPos);
         return 1;
@@ -40,7 +40,7 @@ void Map::movePlayer(Direction dir){
 
     Coords wantedCoords = {playerCoords.r + dr, playerCoords.c + dc};
 
-    if((wantedCoords.c >= 0) && (wantedCoords.c < width) && (wantedCoords.r >= 0) && (wantedCoords.c < height) && (getCells(wantedCoords) != 1)) // still in the map and not a wall
+    if((wantedCoords.c >= 0) && (wantedCoords.c < width) && (wantedCoords.r >= 0) && (wantedCoords.r < height) && (getCells(wantedCoords) != 1)) // still in the map and not a wall
     {
         if(isBoxCoords(wantedCoords)) // is a box
         {

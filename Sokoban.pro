@@ -9,7 +9,6 @@ CONFIG += c++17
 SOURCES += \
     Load.cpp \
     bloc.cpp \
-    coords.cpp \
     display.cpp \
     entity.cpp \
     floor.cpp \
