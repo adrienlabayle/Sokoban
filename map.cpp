@@ -1,19 +1,28 @@
 #include "map.h"
 
 Map::Map(int w, int h) :
-    height(h), width(w)
+    height(h), width(w), cells(w * h)
 {
-    cells.assign(height * width, 0);
+
 }
 
 // Member methods
 
-bool Map::moveBox(Coords pos, Coords wantedPos){
-    if((wantedPos.r >= 0) && (wantedPos.r < height) && (wantedPos.c >= 0) && (wantedPos.c < width) && (getCells(wantedPos) != 1) && (!isBoxCoords(wantedPos))) // still in the map, not a wall and not a box
-    {
-        moveBoxCoords(pos, wantedPos);
-        return 1;
+bool Map::moveBox(Coords coords, Coords wantedCoords){
+    // We check again if this is effectivly a box
+    auto it = std::find_if(boxes.begin(), boxes.end(), [&coords](const MobileEntity& box) {
+        return box.getCoords() == coords;
+    });
+
+    if (it != boxes.end()) {
+        if((wantedCoords.r >= 0) && (wantedCoords.r < height) && (wantedCoords.c >= 0) && (wantedCoords.c < width) && (getCells(wantedCoords).getValue() != 1) && (!isBox(wantedCoords)))
+        {   // still in the map, not a wall and not a box
+            it->setCoords(wantedCoords);
+            return 1;
+        }
+        return 0;
     }
+
     return 0;
 }
 
@@ -38,22 +47,20 @@ void Map::movePlayer(Direction dir){
         break;
     }
 
-    Coords wantedCoords = {playerCoords.r + dr, playerCoords.c + dc};
+    Coords wantedCoords = player.getCoords() + Coords{dr, dc};
 
-    if((wantedCoords.c >= 0) && (wantedCoords.c < width) && (wantedCoords.r >= 0) && (wantedCoords.r < height) && (getCells(wantedCoords) != 1)) // still in the map and not a wall
+    if((wantedCoords.c >= 0) && (wantedCoords.c < width) && (wantedCoords.r >= 0) && (wantedCoords.r < height) && (getCells(wantedCoords).getValue() != 1)) // still in the map and not a wall
     {
-        if(isBoxCoords(wantedCoords)) // is a box
+        if(isBox(wantedCoords)) // is a box
         {
             if (moveBox(wantedCoords, {wantedCoords.r + dr, wantedCoords.c + dc}))
-            {
-                playerCoords.r += dr;
-                playerCoords.c += dc;
+            {   // we have moved successfully the box next to him, so we can move the player
+                player.setCoords(wantedCoords);
             }
         }
         else // then it is either an empty case or a depot
         {
-            playerCoords.r += dr;
-            playerCoords.c += dc;
+            player.setCoords(wantedCoords);
         }
         //check if its in the grid, if its free, and if its movable, do recurence
     }
@@ -69,44 +76,36 @@ int Map::getWidth() const{
     return width;
 }
 
-void Map::setCells(Coords coords, int val){
-    cells[coords.r * width + coords.c] = val;
+void Map::setCells(Coords coords, std::unique_ptr<StaticEntity>&& staticEntity){
+    cells[coords.r * width + coords.c] = std::move(staticEntity);
 }
 
-int Map::getCells(Coords coords) const{
-    return cells[coords.r * width + coords.c];
+const StaticEntity& Map::getCells(Coords coords) const{
+    return *cells[coords.r * width + coords.c];
 }
 
 int Map::getDisplayCells(Coords coords) const{
-    if (isBoxCoords(coords))
+    if (isBox(coords))
         return 3;
-    if (coords == playerCoords)
+    if (coords == player.getCoords())
         return 4;
-    return getCells(coords);
+    return getCells(coords).getValue();
 }
 
 void Map::setPlayerCoords(Coords coords){
-    playerCoords = coords;
+    player.setCoords(coords);
 }
 
-void Map::addBoxCoords(Coords coords){
-    boxesCoords.push_back(coords);
+void Map::addBox(Coords coords){
+    boxes.emplace_back(coords);
 }
 
-bool Map::isBoxCoords(Coords coords) const{
-    auto it = std::find(boxesCoords.begin(), boxesCoords.end(), coords);
+bool Map::isBox(Coords coords) const {
+    // std::find_if cherche un élément qui valide la condition de la fonction lambda
+    auto it = std::find_if(boxes.begin(), boxes.end(), [&coords](const MobileEntity& box) {
+        return box.getCoords() == coords;
+    });
 
-    if (it != boxesCoords.end()) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-void Map::moveBoxCoords(Coords coords, Coords wantedCoords){
-    auto it = std::find(boxesCoords.begin(), boxesCoords.end(), coords);
-
-    if (it != boxesCoords.end()) {
-        *it = wantedCoords;
-    }
+    // Si l'itérateur n'a pas atteint la fin, c'est qu'une caisse a été trouvée
+    return it != boxes.end();
 }

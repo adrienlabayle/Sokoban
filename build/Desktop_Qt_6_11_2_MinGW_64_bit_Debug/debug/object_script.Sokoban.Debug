@@ -1,0 +1,15 @@
+debug/Box.o
+debug/Depot.o
+debug/Load.o
+debug/display.o
+debug/entity.o
+debug/floor.o
+debug/game.o
+debug/main.o
+debug/mainwindow.o
+debug/map.o
+debug/mobileentity.o
+debug/player.o
+debug/staticentity.o
+debug/wall.o
+debug/moc_mainwindow.o

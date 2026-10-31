@@ -8,8 +8,7 @@ class Floor : public StaticEntity {
     public:
         Floor(Coords coords);
 
-        bool isWalkable() const override;
-        char getSymbol() const override;
+        int getValue() const override;
 
 };
 

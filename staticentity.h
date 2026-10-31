@@ -8,8 +8,6 @@ class StaticEntity : public Entity {
     public:
         StaticEntity(Coords coords);
 
-        virtual bool isWalkable() const = 0;
-        virtual bool isGoal() const;
-
+        virtual int getValue() const = 0;
 };
 #endif // STATICENTITY_H
