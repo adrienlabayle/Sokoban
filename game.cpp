@@ -6,7 +6,11 @@ Game::Game(Map&& m) :
 
 }
 
-void Game::Show(QPainter* p, int width, int height) const
+void Game::show(QPainter* p, int width, int height) const
 {
     display.DisplayMap(p, width, height, map);
+}
+
+void Game::reset(Map&& m){
+    map = std::move(m);
 }

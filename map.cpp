@@ -100,7 +100,7 @@ void Map::addBox(Coords coords){
     boxes.emplace_back(coords);
 }
 
-bool Map::isBox(Coords coords) const {
+bool Map::isBox(Coords coords) const{
     // std::find_if cherche un élément qui valide la condition de la fonction lambda
     auto it = std::find_if(boxes.begin(), boxes.end(), [&coords](const MobileEntity& box) {
         return box.getCoords() == coords;
@@ -108,4 +108,23 @@ bool Map::isBox(Coords coords) const {
 
     // Si l'itérateur n'a pas atteint la fin, c'est qu'une caisse a été trouvée
     return it != boxes.end();
+}
+
+bool Map::winCheck() const{
+    int depotCount = 0;
+    int donedBoxCount = 0;
+
+    for (int r = 0; r < height; r++)
+        for (int c = 0; c < width; c++)
+        {
+            if (cells[r * width + c]->getValue() == 2){
+                depotCount++;
+                if (isBox({r, c}))
+                    donedBoxCount++;
+            }
+        }
+    if (depotCount == donedBoxCount)
+        return 1;
+
+    return 0;
 }

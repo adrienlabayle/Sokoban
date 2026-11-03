@@ -24,17 +24,24 @@ class Map {
 
     public:
         Map(int width = 0, int height = 0);
+
         bool moveBox(Coords pos, Coords wantedPos);
         void movePlayer(Direction dir);
 
         int getHeight() const;
         int getWidth() const;
+
         void setCells(Coords coords, std::unique_ptr<StaticEntity>&& staticEntity);
         const StaticEntity& getCells(Coords coords) const;
+
         int getDisplayCells(Coords coords) const;
+
         void setPlayerCoords(Coords coords);
+
         void addBox(Coords coords);
         bool isBox(Coords coords) const;
+
+        bool winCheck() const;
 
 };
 

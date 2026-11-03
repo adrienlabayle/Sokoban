@@ -14,7 +14,10 @@ class Game {
 
     public:
         Game(Map&& m);
-        void Show(QPainter* p, int width, int height) const;
+
+        void show(QPainter* p, int width, int height) const;
+        void reset(Map&& m);
+
         Map map;
 
 };
