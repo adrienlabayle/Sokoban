@@ -8,10 +8,10 @@
 class Display {
 
     private:
-        QPixmap wallTexture{"E:/ADRIEN_2026/C++/Sokoban/images/wall.png"};
-        QPixmap boxTexture{"E:/ADRIEN_2026/C++/Sokoban/images/box.png"};
-        QPixmap depotTexture{"E:/ADRIEN_2026/C++/Sokoban/images/depot.png"};
-        QPixmap playerTexture{"E:/ADRIEN_2026/C++/Sokoban/images/player.png"};
+        QPixmap wallTexture{":/images/images/wall.png"};
+        QPixmap boxTexture{":/images/images/box.png"};
+        QPixmap depotTexture{":/images/images/depot.png"};
+        QPixmap playerTexture{":/images/images/player.png"};
 
     public:
         Display();

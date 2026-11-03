@@ -1,5 +1,6 @@
 #include "Load.h"
 
+#include <QFile>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
@@ -22,10 +23,11 @@ std::unique_ptr<StaticEntity> Load::charToCell(char c, Coords coords, Map& map) 
 }
 
 Map Load::LoadMap(const std::filesystem::path& path) {
-    std::ifstream file(path);
-    if (!file) {
+    QFile qfile(QString::fromStdString(path.string()));
+    if (!qfile.open(QIODevice::ReadOnly)) {
         throw std::runtime_error("LoadMap : impossible d'ouvrir " + path.string());
     }
+    std::istringstream file(qfile.readAll().toStdString());
 
     std::string line;
     if (!std::getline(file, line)) {

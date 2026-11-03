@@ -3,12 +3,12 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), game(Load::LoadMap("E:/ADRIEN_2026/C++/Sokoban/maps/map_test.txt"))
+    , ui(new Ui::MainWindow), game(Load::LoadMap(":/levels/levels/map_test.txt"))
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
 
-    menuBackground.load("E:/ADRIEN_2026/C++/Sokoban/images/menuBackground.jpg");
+    menuBackground.load(":/images/images/menuBackground.jpg");
 }
 
 MainWindow::~MainWindow()
@@ -53,7 +53,7 @@ void MainWindow::showMenu(){
 }
 
 void MainWindow::showGame(){
-    game.reset(Load::LoadMap("E:/ADRIEN_2026/C++/Sokoban/maps/map_test.txt"));
+    game.reset(Load::LoadMap(":/levels/levels/map_test.txt"));
     ui->stackedWidget->setCurrentIndex(1);
     this->repaint();
 }

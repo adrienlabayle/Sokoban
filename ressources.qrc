@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>images/box.png</file>
+        <file>images/depot.png</file>
+        <file>images/menuBackground.jpg</file>
+        <file>images/player.png</file>
+        <file>images/wall.png</file>
+    </qresource>
+    <qresource prefix="/levels">
+        <file>levels/map_test.txt</file>
+    </qresource>
+</RCC>
