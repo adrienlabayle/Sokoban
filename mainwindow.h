@@ -22,9 +22,17 @@ class MainWindow : public QMainWindow{
         void paintEvent(QPaintEvent* e);
         void keyPressEvent(QKeyEvent * event);
 
+        void showMenu();
+        void showGame();
+
+    private slots:
+        void on_menuPlayButton_clicked();
+
     private:
         Ui::MainWindow *ui;
         Game game;
+
+        QPixmap menuBackground;
 
 };
 #endif // MAINWINDOW_H

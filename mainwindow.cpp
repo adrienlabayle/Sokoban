@@ -3,9 +3,12 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), game(Load::LoadMap("C:/Users/masth/IMDS5A/Projet_5A/Sokoban_final/maps/map_test.txt"))
+    , ui(new Ui::MainWindow), game(Load::LoadMap("E:/ADRIEN_2026/C++/Sokoban/maps/map_test.txt"))
 {
     ui->setupUi(this);
+    ui->stackedWidget->setCurrentIndex(0);
+
+    menuBackground.load("E:/ADRIEN_2026/C++/Sokoban/images/menuBackground.jpg");
 }
 
 MainWindow::~MainWindow()
@@ -17,7 +20,12 @@ void MainWindow::paintEvent(QPaintEvent* e){   //affiche a l'ecran tt les choses
     QWidget::paintEvent(e);
     QPainter painter(this);
 
-    game.Show(&painter, width(),height());
+    if(ui->stackedWidget->currentIndex()==0){
+        painter.drawPixmap(rect(), menuBackground);
+    }
+    else if(ui->stackedWidget->currentIndex()==1){
+        game.show(&painter, width(),height());
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent * event){   //event loop, cest un peu la boucle du jeu, on detecte les touche utiliser par le joueur afin deffectuer les action quil souhaite realiser
@@ -34,5 +42,23 @@ void MainWindow::keyPressEvent(QKeyEvent * event){   //event loop, cest un peu l
         break;
     }
 
+    if (game.map.winCheck()) showMenu();
+
     this->repaint();
+}
+
+void MainWindow::showMenu(){
+    ui->stackedWidget->setCurrentIndex(0);
+    this->repaint();
+}
+
+void MainWindow::showGame(){
+    game.reset(Load::LoadMap("E:/ADRIEN_2026/C++/Sokoban/maps/map_test.txt"));
+    ui->stackedWidget->setCurrentIndex(1);
+    this->repaint();
+}
+
+void MainWindow::on_menuPlayButton_clicked()
+{
+    showGame();
 }

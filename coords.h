@@ -8,6 +8,10 @@ struct Coords {
     bool operator==(const Coords& other) const {
         return r == other.r && c == other.c;
     }
+
+    Coords operator+(const Coords& other) const {
+        return {r + other.r, c + other.c};
+    }
 };
 
 enum class Direction {

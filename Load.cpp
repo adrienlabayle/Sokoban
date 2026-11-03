@@ -5,17 +5,17 @@
 #include <stdexcept>
 #include <string>
 
-int Load::charToCell(char c, Coords coords, Map& map) {
+std::unique_ptr<StaticEntity> Load::charToCell(char c, Coords coords, Map& map) {
     switch (c) {
-        case ' ': return 0;
+        case ' ': return std::make_unique<Floor>(coords);
         case 'P': // we have to keep the information of what is under the player
             map.setPlayerCoords(coords);
-            return 0;
-        case 'x': return 1;
-        case '-': return 2;
+            return std::make_unique<Floor>(coords);
+        case 'x': return std::make_unique<Wall>(coords);
+        case '-': return std::make_unique<Depot>(coords);
         case '+':
-            map.addBoxCoords(coords);
-            return 0;
+            map.addBox(coords);
+            return std::make_unique<Floor>(coords);
         default:
             throw std::runtime_error("LoadMap : caractere inconnu '" + std::string(1, c) + "' a la case (" + std::to_string(coords.r) + ", " + std::to_string(coords.c) + ")");
     }

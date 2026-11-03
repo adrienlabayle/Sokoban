@@ -13,6 +13,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
@@ -22,6 +24,10 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
+    QStackedWidget *stackedWidget;
+    QWidget *menu;
+    QPushButton *menuPlayButton;
+    QWidget *game;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -32,10 +38,22 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
+        stackedWidget = new QStackedWidget(centralwidget);
+        stackedWidget->setObjectName("stackedWidget");
+        stackedWidget->setGeometry(QRect(0, -1, 801, 581));
+        menu = new QWidget();
+        menu->setObjectName("menu");
+        menuPlayButton = new QPushButton(menu);
+        menuPlayButton->setObjectName("menuPlayButton");
+        menuPlayButton->setGeometry(QRect(350, 280, 75, 24));
+        stackedWidget->addWidget(menu);
+        game = new QWidget();
+        game->setObjectName("game");
+        stackedWidget->addWidget(game);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 800, 17));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -43,12 +61,16 @@ public:
 
         retranslateUi(MainWindow);
 
+        stackedWidget->setCurrentIndex(0);
+
+
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        menuPlayButton->setText(QCoreApplication::translate("MainWindow", "PLAY", nullptr));
     } // retranslateUi
 
 };

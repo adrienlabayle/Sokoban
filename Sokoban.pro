@@ -7,13 +7,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Box.cpp \
+    Depot.cpp \
     Load.cpp \
-    bloc.cpp \
     display.cpp \
     entity.cpp \
     floor.cpp \
     game.cpp \
-    location.cpp \
     main.cpp \
     mainwindow.cpp \
     map.cpp \
@@ -23,15 +23,15 @@ SOURCES += \
     wall.cpp
 
 HEADERS += \
+    Box.h \
+    Depot.h \
     Load.h \
     Map.h \
-    bloc.h \
     coords.h \
     display.h \
     entity.h \
     floor.h \
     game.h \
-    location.h \
     mainwindow.h \
     mobileentity.h \
     player.h \

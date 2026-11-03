@@ -15,8 +15,6 @@ class Entity {
         Coords getCoords() const;
         void setCoords(Coords coords);
 
-        virtual char getSymbol() const = 0;
-
 };
 
 #endif // ENTITY_H

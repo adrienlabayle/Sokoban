@@ -8,8 +8,7 @@ class Wall : public StaticEntity {
     public:
         Wall(Coords coords);
 
-        bool isWalkable() const override;
-        char getSymbol() const override;
+        int getValue() const override;
 
 };
 
