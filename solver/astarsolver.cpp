@@ -1,20 +1,19 @@
-/*
 #include "AStarSolver.h"
 #include <iostream>
 
-AStarSolver::AStarSolver(const Map& initialMap) : initialMap(initialMap) {}
+AStarSolver::AStarSolver(const Map& initialMap) : initialMap(&initialMap) {}
 
 // simple heuristique : sum of the manhattan distance between each box and his closest depot
 int AStarSolver::calculateHeuristic(const AStarState& state) const {
     int h = 0;
-    int height = initialMap.getHeight();
-    int width = initialMap.getWidth();
+    int height = initialMap->getHeight();
+    int width = initialMap->getWidth();
 
     // get all the depots of the initial map
     std::vector<Coords> depots;
     for (int r = 0; r < height; ++r) {
         for (int c = 0; c < width; ++c) {
-            if (initialMap.getCells({r, c}).getValue() == 2) { // 2 = depot
+            if (initialMap->getCells({r, c}).getValue() == 2) { // 2 = depot
                 depots.push_back({r, c});
             }
         }
@@ -35,7 +34,7 @@ int AStarSolver::calculateHeuristic(const AStarState& state) const {
     return h;
 }
 
-// Simulation d'un mouvement sur un état donné
+// simulation of a move on a given state; WATCHOUT : we check this on the cells, box and player positions on the current stat and not the initial map, which can be both different
 bool AStarSolver::simulateMove(AStarState& state, Direction dir) const {
     int dr = 0;
     int dc = 0;
@@ -49,38 +48,38 @@ bool AStarSolver::simulateMove(AStarState& state, Direction dir) const {
     }
 
     Coords wantedCoords = state.playerPos + Coords{dr, dc};
-    int height = initialMap.getHeight();
-    int width = initialMap.getWidth();
+    int height = initialMap->getHeight();
+    int width = initialMap->getWidth();
 
-    // Vérifier les limites et les murs (1 = mur dans ton code)
+    // check if the wanted position is in the map and not a wall
     if (wantedCoords.c >= 0 && wantedCoords.c < width && wantedCoords.r >= 0 && wantedCoords.r < height) {
-        if (initialMap.getCells(wantedCoords).getValue() == 1) {
-            return false; // Mur
+        if (initialMap->getCells(wantedCoords).getValue() == 1) {
+            return false; // Wall
         }
 
-        // Vérifier si une caisse est sur la case souhaitée
+        // chek if there is a box on the wanted pos
         auto it = std::find(state.boxes.begin(), state.boxes.end(), wantedCoords);
         if (it != state.boxes.end()) {
-            // C'est une caisse, on regarde derrière elle
+            // there is a box at the wanted coords, so we check behind her if we can move her
             Coords boxWantedCoords = {wantedCoords.r + dr, wantedCoords.c + dc};
 
-            // Vérifier si la case derrière la caisse est valide (dans la map, pas un mur, pas une autre caisse)
+            // check if the next cell is valid (in the map and not a wall or an other box)
             if (boxWantedCoords.c >= 0 && boxWantedCoords.c < width && boxWantedCoords.r >= 0 && boxWantedCoords.r < height) {
-                if (initialMap.getCells(boxWantedCoords).getValue() != 1) {
+                if (initialMap->getCells(boxWantedCoords).getValue() != 1) {
                     auto itOtherBox = std::find(state.boxes.begin(), state.boxes.end(), boxWantedCoords);
                     if (itOtherBox == state.boxes.end()) {
-                        // On peut bouger la caisse et le joueur
+                        // the cell at the wanted box coords is in the map, not a wall and not a wall, so we can move both of the player and the box
                         *it = boxWantedCoords;
-                        // Important : garder les caisses triées pour que l'opérateur < du std::set fonctionne bien
+                        // important: keep the box sorted, so that the operator< of the std::set can work well
                         std::sort(state.boxes.begin(), state.boxes.end());
                         state.playerPos = wantedCoords;
                         return true;
                     }
                 }
             }
-            return false; // La caisse ne peut pas être poussée
+            return false; // the box cant be push
         } else {
-            // Case vide ou dépôt, le joueur avance simplement
+            // empty case or depot, the player simply move in the wanted direction
             state.playerPos = wantedCoords;
             return true;
         }
@@ -88,13 +87,13 @@ bool AStarSolver::simulateMove(AStarState& state, Direction dir) const {
     return false;
 }
 
-// Générer les voisins valides
+// generate the valid neighbors (simulate the move for each direction and stock the given stats)
 std::vector<std::pair<AStarState, Direction>> AStarSolver::getNeighbors(const AStarState& state) const {
     std::vector<std::pair<AStarState, Direction>> neighbors;
     Direction directions[] = {Direction::Up, Direction::Down, Direction::Left, Direction::Right};
 
     for (Direction dir : directions) {
-        AStarState newState = state; // Copie de l'état actuel
+        AStarState newState = state; // copy of the actual state
         if (simulateMove(newState, dir)) {
             neighbors.push_back({newState, dir});
         }
@@ -103,22 +102,12 @@ std::vector<std::pair<AStarState, Direction>> AStarSolver::getNeighbors(const AS
     return neighbors;
 }
 
-// Algorithme A* principal
+// main algorithme A*
 bool AStarSolver::solve() {
-    // 1. Construire l'état initial à partir de la Map
-    AStarState startState;
+    // 1. build the initial state from the map
+    AStarState startState(*initialMap);
 
-    // Récupérer la position du joueur (en supposant que tu as un getter player.getCoords() dans Map)
-    startState.playerPos = initialMap.getPlayerCoords(); // Adapte le nom du getter si besoin
-
-    // Récupérer les coordonnées de toutes les caisses
-    for (const auto& box : initialMap.getBoxes()) { // Adapte si ton getter s'appelle autrement (ex: getBoxes())
-        startState.boxes.push_back(box.getCoords());
-    }
-    // Très important : trier les caisses pour que la comparaison d'états fonctionne bien
-    std::sort(startState.boxes.begin(), startState.boxes.end());
-
-    // 2. Structures de données du A*
+    // 2. data structure of the A*
     std::priority_queue<AStarNode, std::vector<AStarNode>, std::greater<AStarNode>> openList;
     std::set<AStarState> closedList;
 
@@ -160,4 +149,3 @@ bool AStarSolver::solve() {
     std::cout << "Aucune solution trouvee (map insoluble)." << std::endl;
     return false;
 }
-*/

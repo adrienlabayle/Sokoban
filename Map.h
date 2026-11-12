@@ -37,10 +37,12 @@ class Map {
         int getDisplayCells(Coords coords) const;
 
         void setPlayerCoords(Coords coords);
+        inline Coords getPlayerCoords() const { return player.getCoords(); }
 
         void addBox(Coords coords);
         void addDoneBox(Coords coords);
         bool isBox(Coords coords) const;
+        inline const std::vector<Box>& getBoxes() const { return boxes; }
 
         bool winCheck() const;
 

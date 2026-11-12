@@ -1,4 +1,3 @@
-/*
 #ifndef ASTARSOLVER_H
 #define ASTARSOLVER_H
 
@@ -8,7 +7,6 @@
 #include <queue>
 #include <set>
 #include <algorithm>
-#include "Map.h"
 #include "AStarState.h"
 
 // Structure pour un nœud de l'arbre de recherche A*
@@ -33,7 +31,7 @@ public:
     bool solve();
 
 private:
-    Map initialMap;
+    const Map* initialMap;
 
     // Calcule l'heuristique (Distance de Manhattan pour commencer)
     int calculateHeuristic(const AStarState& state) const;
@@ -46,4 +44,3 @@ private:
 };
 
 #endif // ASTARSOLVER_H
-*/
