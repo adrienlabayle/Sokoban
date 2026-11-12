@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), game(Load::LoadMap(":/levels/levels/map_test.txt"))
+    , ui(new Ui::MainWindow), game(Load::loadMap(":/levels/levels/map_test.txt"))
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
@@ -53,7 +53,7 @@ void MainWindow::showMenu(){
 }
 
 void MainWindow::showGame(){
-    game.reset(Load::LoadMap(":/levels/levels/map_test.txt"));
+    game.reset(Load::loadMap(":/levels/levels/map_test.txt"));
     ui->stackedWidget->setCurrentIndex(1);
     this->repaint();
 }

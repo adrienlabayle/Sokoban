@@ -18,6 +18,7 @@ bool Map::moveBox(Coords coords, Coords wantedCoords){
         if((wantedCoords.r >= 0) && (wantedCoords.r < height) && (wantedCoords.c >= 0) && (wantedCoords.c < width) && (getCells(wantedCoords).getValue() != 1) && (!isBox(wantedCoords)))
         {   // still in the map, not a wall and not a box
             it->setCoords(wantedCoords);
+            it->setDone(getCells(wantedCoords));
             return 1;
         }
         return 0;
@@ -85,10 +86,14 @@ const StaticEntity& Map::getCells(Coords coords) const{
 }
 
 int Map::getDisplayCells(Coords coords) const{
-    if (isBox(coords))
-        return 3;
+    if (isBox(coords)){
+        if (getCells(coords).getValue() == 2)
+            return 5; // we want to display a box that is done
+
+        return 3; // we want to display a box
+    }
     if (coords == player.getCoords())
-        return 4;
+        return 4; // we want to display the player
     return getCells(coords).getValue();
 }
 
@@ -98,6 +103,10 @@ void Map::setPlayerCoords(Coords coords){
 
 void Map::addBox(Coords coords){
     boxes.emplace_back(coords);
+}
+
+void Map::addDoneBox(Coords coords){
+    boxes.emplace_back(coords, true);
 }
 
 bool Map::isBox(Coords coords) const{
@@ -111,6 +120,7 @@ bool Map::isBox(Coords coords) const{
 }
 
 bool Map::winCheck() const{
+    /*
     int depotCount = 0;
     int donedBoxCount = 0;
 
@@ -127,4 +137,11 @@ bool Map::winCheck() const{
         return 1;
 
     return 0;
+    */
+
+    for(const auto& box : boxes){
+        if (!box.isDone())
+            return false;
+    }
+    return true;
 }

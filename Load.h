@@ -10,7 +10,7 @@ class Load {
         static std::unique_ptr<StaticEntity> charToCell(char c, Coords coords, Map& map);
 
     public:
-        static Map LoadMap(const std::filesystem::path& path);
+        static Map loadMap(const std::filesystem::path& path);
 
 };
 

@@ -8,7 +8,6 @@ class MobileEntity : public Entity {
     public:
         MobileEntity(Coords coords);
 
-        Coords getNextCoords(Direction dir) const;
         void move(Direction dir);
 
 };

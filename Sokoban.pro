@@ -19,6 +19,8 @@ SOURCES += \
     map.cpp \
     mobileentity.cpp \
     player.cpp \
+    solver/astar.cpp \
+    solver/astarsolver.cpp \
     staticentity.cpp \
     wall.cpp
 
@@ -35,6 +37,9 @@ HEADERS += \
     mainwindow.h \
     mobileentity.h \
     player.h \
+    solver/AStarState.h \
+    solver/astar.h \
+    solver/astarsolver.h \
     staticentity.h \
     wall.h
 

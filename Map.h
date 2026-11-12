@@ -39,6 +39,7 @@ class Map {
         void setPlayerCoords(Coords coords);
 
         void addBox(Coords coords);
+        void addDoneBox(Coords coords);
         bool isBox(Coords coords) const;
 
         bool winCheck() const;

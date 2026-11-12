@@ -12,6 +12,7 @@ class Display {
         QPixmap boxTexture{":/images/images/box.png"};
         QPixmap depotTexture{":/images/images/depot.png"};
         QPixmap playerTexture{":/images/images/player.png"};
+        QPixmap boxDoneTexture{":/images/images/boxDone.png"};
 
     public:
         Display();

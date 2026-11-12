@@ -17,12 +17,15 @@ std::unique_ptr<StaticEntity> Load::charToCell(char c, Coords coords, Map& map) 
         case '+':
             map.addBox(coords);
             return std::make_unique<Floor>(coords);
+        case '=':
+            map.addDoneBox(coords);
+            return std::make_unique<Depot>(coords);
         default:
             throw std::runtime_error("LoadMap : caractere inconnu '" + std::string(1, c) + "' a la case (" + std::to_string(coords.r) + ", " + std::to_string(coords.c) + ")");
     }
 }
 
-Map Load::LoadMap(const std::filesystem::path& path) {
+Map Load::loadMap(const std::filesystem::path& path) {
     QFile qfile(QString::fromStdString(path.string()));
     if (!qfile.open(QIODevice::ReadOnly)) {
         throw std::runtime_error("LoadMap : impossible d'ouvrir " + path.string());

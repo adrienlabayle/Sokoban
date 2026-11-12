@@ -40,10 +40,13 @@ void Display::DisplayMap(QPainter* p, int width, int height, const Map& map) con
             case 4:
                 currentBruch.setTexture(playerTexture.scaled(cell_w, cell_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
                 break;
+            case 5:
+                currentBruch.setTexture(boxDoneTexture.scaled(cell_w, cell_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                break;
+            default:
+                break;
             }
 
-            //p->setPen(QPen(Qt::white, 1));
             p->fillRect(j * cell_w, i * cell_h, cell_w, cell_h, currentBruch);
-            //p->drawRect(j * cell_w, i * cell_h, cell_w, cell_h);
         }
 }
