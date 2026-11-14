@@ -14,7 +14,7 @@ struct AStarNode {
     AStarState state;
     int gCost; // Coût réel depuis le départ (nombre de mouvements)
     int hCost; // Estimation heuristique jusqu'au but
-    int fCost() const { return gCost + hCost; }
+    inline int fCost() const { return gCost + hCost; }
 
     // Pour trier la priority_queue (on veut le plus petit fCost en premier)
     bool operator>(const AStarNode& other) const {
@@ -24,7 +24,7 @@ struct AStarNode {
 
 class AStarSolver {
 public:
-    AStarSolver(const Map& initialMap);
+    AStarSolver(const Map& initialMapArg);
 
     // Lance la résolution. Renvoie une liste de directions (ou mouvements) pour réussir la map.
     // Pour l'instant, on retourne un booléen pour savoir si une solution existe.
@@ -32,6 +32,7 @@ public:
 
 private:
     const Map* initialMap;
+    std::vector<Coords> depots;
 
     // Calcule l'heuristique (Distance de Manhattan pour commencer)
     int calculateHeuristic(const AStarState& state) const;

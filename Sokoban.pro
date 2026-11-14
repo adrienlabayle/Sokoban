@@ -2,46 +2,45 @@ QT += widgets
 
 CONFIG += c++17
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+INCLUDEPATH += $$PWD/include \
+               $$PWD/solver
 
 SOURCES += \
-    Box.cpp \
-    Depot.cpp \
-    Load.cpp \
-    display.cpp \
-    entity.cpp \
-    floor.cpp \
-    game.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    map.cpp \
-    mobileentity.cpp \
-    player.cpp \
     solver/astar.cpp \
     solver/astarsolver.cpp \
-    staticentity.cpp \
-    wall.cpp
+    src/Box.cpp \
+    src/Depot.cpp \
+    src/Load.cpp \
+    src/display.cpp \
+    src/entity.cpp \
+    src/floor.cpp \
+    src/game.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/map.cpp \
+    src/mobileentity.cpp \
+    src/player.cpp \
+    src/staticentity.cpp \
+    src/wall.cpp
 
 HEADERS += \
-    Box.h \
-    Depot.h \
-    Load.h \
-    Map.h \
-    coords.h \
-    display.h \
-    entity.h \
-    floor.h \
-    game.h \
-    mainwindow.h \
-    mobileentity.h \
-    player.h \
+    include/Box.h \
+    include/Depot.h \
+    include/Load.h \
+    include/Map.h \
+    include/coords.h \
+    include/display.h \
+    include/entity.h \
+    include/floor.h \
+    include/game.h \
+    include/mainwindow.h \
+    include/mobileentity.h \
+    include/player.h \
+    include/staticentity.h \
+    include/wall.h \
     solver/AStarState.h \
     solver/astar.h \
-    solver/astarsolver.h \
-    staticentity.h \
-    wall.h
+    solver/astarsolver.h
 
 FORMS += \
     mainwindow.ui

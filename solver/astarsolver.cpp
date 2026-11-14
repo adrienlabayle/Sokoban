@@ -1,23 +1,21 @@
 #include "AStarSolver.h"
 #include <iostream>
 
-AStarSolver::AStarSolver(const Map& initialMap) : initialMap(&initialMap) {}
-
-// simple heuristique : sum of the manhattan distance between each box and his closest depot
-int AStarSolver::calculateHeuristic(const AStarState& state) const {
-    int h = 0;
+AStarSolver::AStarSolver(const Map& initialMapArg) : initialMap(&initialMapArg) {
     int height = initialMap->getHeight();
     int width = initialMap->getWidth();
-
-    // get all the depots of the initial map
-    std::vector<Coords> depots;
     for (int r = 0; r < height; ++r) {
         for (int c = 0; c < width; ++c) {
-            if (initialMap->getCells({r, c}).getValue() == 2) { // 2 = depot
+            if (initialMap->getCells({r, c}).getValue() == 2) {
                 depots.push_back({r, c});
             }
         }
     }
+}
+
+// simple heuristique : sum of the manhattan distance between each box and his closest depot
+int AStarSolver::calculateHeuristic(const AStarState& state) const {
+    int h = 0;
 
     // for each box, find the minimal distance towards an available depot
     for (const auto& box : state.boxes) {
@@ -34,7 +32,7 @@ int AStarSolver::calculateHeuristic(const AStarState& state) const {
     return h;
 }
 
-// simulation of a move on a given state; WATCHOUT : we check this on the cells, box and player positions on the current stat and not the initial map, which can be both different
+// simulation of a move on a given state; WATCHOUT : we check the cells, box and player positions on the current stat and not the initial map, which can be both different
 bool AStarSolver::simulateMove(AStarState& state, Direction dir) const {
     int dr = 0;
     int dc = 0;
@@ -107,33 +105,35 @@ bool AStarSolver::solve() {
     // 1. build the initial state from the map
     AStarState startState(*initialMap);
 
-    // 2. data structure of the A*
+    // 2. data structure of the A*; the openList is a heap that pop the best AStarNode, the one with the lowest fCost
     std::priority_queue<AStarNode, std::vector<AStarNode>, std::greater<AStarNode>> openList;
-    std::set<AStarState> closedList;
+    std::set<AStarState> closedList; // the closedList is a bst(binary search tree) self-balanced by the black-red rotations logics
+    // the goal of the closedList is to archive all the state already seen,
+    // this way we dont have to modify the AStarNodes in the openList whene needed which is not really possible,
+    // instead we just add a new node in the openList and check in the closedList each time if the current state has been already seen
 
-    // 3. Mettre l'état initial dans l'Open List
+    // 3. put the initial AStarNode in the openList
     int startH = calculateHeuristic(startState);
     openList.push({startState, 0, startH});
 
     while (!openList.empty()) {
-        // Récupérer le nœud avec le plus petit fCost
+        // get the node with the lowest fCost
         AStarNode currentNode = openList.top();
         openList.pop();
 
-        // Condition de victoire : est-ce que toutes les caisses sont sur un dépôt ?
-        // (Tu peux créer une petite fonction winCheck adaptée à l'état, ou utiliser la logique existante)
-        if (calculateHeuristic(currentNode.state) == 0) {
+        // win condition : are all the boxes on a depot ?
+        if (currentNode.hCost == 0) {
             std::cout << "Solution trouvee en " << currentNode.gCost << " mouvements !" << std::endl;
             return true;
         }
 
-        // Si l'état a déjà été visité, on l'ignore
+        // if the state has already been checked, we pass
         if (closedList.count(currentNode.state)) {
             continue;
         }
         closedList.insert(currentNode.state);
 
-        // Explorer les voisins (les 4 directions)
+        // explore the neighbors (4 directions)
         for (auto& [neighborState, moveDir] : getNeighbors(currentNode.state)) {
             if (closedList.count(neighborState)) {
                 continue;
